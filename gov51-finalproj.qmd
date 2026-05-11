@@ -15,6 +15,8 @@ execute:
   message: false
 ---
 
+<https://github.com/felicityxz17/gov51-finalproj>
+
 # 1 Introduction
 
 The judiciary has long been viewed as a vital pillar of American government, serving as the integral third branch within our delicate political system of checks and balances. At the head of the federal judiciary is the Supreme Court of the United States, responsible for delivering the final verdict on many of the nation's most contentious and consequential legal disputes around issues ranging from abortion to gun laws. With no elections or term limits and the power of judicial review, the Court holds the unique and vital role — at least in theory — of holding fast to unbiased legal interpretation, a bulwark against the fluctuating forces of politicization from the outside world.
