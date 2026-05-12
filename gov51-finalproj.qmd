@@ -114,6 +114,22 @@ court_opinion_4 <- c(
   mean(court_opinion_party5$INSTFAV_COURT_W149 == 4)
 )
 
+court_opinion_means <- c(
+  mean(court_opinion_party1$INSTFAV_COURT_W149),
+  mean(court_opinion_party2$INSTFAV_COURT_W149),
+  mean(court_opinion_party3$INSTFAV_COURT_W149),
+  mean(court_opinion_party4$INSTFAV_COURT_W149),
+  mean(court_opinion_party5$INSTFAV_COURT_W149)
+)
+
+court_opinion_sds <- c(
+  sd(court_opinion_party1$INSTFAV_COURT_W149),
+  sd(court_opinion_party2$INSTFAV_COURT_W149),
+  sd(court_opinion_party3$INSTFAV_COURT_W149),
+  sd(court_opinion_party4$INSTFAV_COURT_W149),
+  sd(court_opinion_party5$INSTFAV_COURT_W149)
+)
+
 court_opinion_comparison <- cbind(court_opinion_1, court_opinion_2, court_opinion_3, court_opinion_4)
 barplot(court_opinion_comparison, beside = T,
         col = c("red", "pink", "white", "skyblue", "blue"),
@@ -123,22 +139,18 @@ barplot(court_opinion_comparison, beside = T,
         main = "Figure 1: Supreme Court Overall Approval by Party"
           )
 
-court_opinion_proportions <- data.frame(c("1 (Republican)", "2 (Lean Republican)", "3 (Moderate)", "4 (Lean Democrat)", "5 (Democrat)"), court_opinion_comparison)
-knitr::kable(court_opinion_proportions, col.names = c("Party", "1 (Very favorable)", "2 (Mostly favorable)", "3 (Mostly unfavorable)", "4 (Very unfavorable)"), caption = "Proportion of Each Political Party by Approval Rating of the Supreme Court")
+court_opinion_summary <- data.frame(c("1 (Republican)", "2 (Lean Republican)", "3 (Moderate)", "4 (Lean Democrat)", "5 (Democrat)"), court_opinion_comparison, court_opinion_means, court_opinion_sds)
+knitr::kable(court_opinion_summary, digits = 3, col.names = c("Party", "1 (Very favorable)", "2 (Mostly favorable)", "3 (Mostly unfavorable)", "4 (Very unfavorable)", "Mean", "Std. Dev."), caption = "Statistics of Supreme Court Approval Overall by Party")
 ```
 
-Figure 1 is a side-by-side bar chart comparing the proportions of respondents providing each rating within their party. There is a clear relationship between partisan affiliation and approval, with respondents who identify more toward the Democrat end of the spectrum displaying lower favorability ratings, while respondents who identify more toward the Republican end of the spectrum display higher favorability ratings. However, consistent with the overall low approval of the Court, Republicans appear less strongly approving of the Court than Democrats appear approving, as the majority (62% and 56%) of Republicans and Lean Republicans rate the Court "Mostly favorable," while around 50% of Democrats and Lean Democrats rate the Court as not merely "Mostly unfavorable" but "Very unfavorable."
+Figure 1 is a side-by-side bar chart comparing the proportions of respondents providing each rating within their party, and Table 2 is a table of summary statistics with the first four columns representing these proportions along with the means and standard deviations within each party. There is a clear relationship between partisan affiliation and approval, with respondents who identify more toward the Democrat end of the spectrum displaying lower favorability ratings, while respondents who identify more toward the Republican end of the spectrum display higher favorability ratings. However, consistent with the overall low approval of the Court, Republicans appear less strongly approving of the Court than Democrats appear approving, as the majority (62% and 56.5%) of Republicans and Lean Republicans rate the Court "Mostly favorable," while around half (47.6% and 42.3%) of Democrats and Lean Democrats rate the Court as not merely "Mostly unfavorable" but "Very unfavorable."
 
 ```{r}
-court_opinion_summary <- data.frame(summarize(group_by(court_opinion, party), mean(INSTFAV_COURT_W149), sd(INSTFAV_COURT_W149)))
-
-knitr::kable(court_opinion_summary, col.names = c("Party", "Mean", "Standard Deviation"), caption = "Summary Statistics of Supreme Court Approval Overall by Party")
-
 lm_court_opinion = lm(INSTFAV_COURT_W149 ~ party, data = court_opinion)
 summary(lm_court_opinion)
 ```
 
-Both the summary statistics table and linear model output confirm a clear positive association between `party` value on the 5-point scale and unfavorability rating of the Court, i.e., increasing Democrat leaning correlates with increasing perceived unfavorability. Although the interpretation of the linear model is not entirely accurate because both variables are technically categorical rather than numerical, the extremely low t-statistic suggests that there is some statistically significant association between party and favorability. Furthermore, the R-squared of the model is 0.3404, suggesting that party affiliation alone (roughly, when measured on a scale of 1-5) explains a noticeable 34% of variability in favorability ratings.
+The linear model further confirms a clear positive association between `party` value on the 5-point scale and unfavorability rating of the Court, i.e., increasing Democrat leaning correlates with increasing perceived unfavorability. Although the interpretation of the linear model is not entirely rigorous because both variables are technically discrete categorical rather than continuous, when this extrapolation is permitted, the extremely low t-statistic suggests that there is some statistically significant association between party and favorability. Furthermore, the R-squared of the model is 0.3404, suggesting that party affiliation alone (roughly, when measured on a scale of 1-5) explains a noticeable 34% of variability in favorability ratings.
 
 # 4 Perceived Power
 
@@ -192,6 +204,22 @@ court_power_3 <- c(
   mean(court_power_party5$COURTPOWER_W149_MOD == 3)
 )
 
+court_power_means <- c(
+  mean(court_power_party1$COURTPOWER_W149_MOD),
+  mean(court_power_party2$COURTPOWER_W149_MOD),
+  mean(court_power_party3$COURTPOWER_W149_MOD),
+  mean(court_power_party4$COURTPOWER_W149_MOD),
+  mean(court_power_party5$COURTPOWER_W149_MOD)
+)
+
+court_power_sds <- c(
+  sd(court_power_party1$COURTPOWER_W149_MOD),
+  sd(court_power_party2$COURTPOWER_W149_MOD),
+  sd(court_power_party3$COURTPOWER_W149_MOD),
+  sd(court_power_party4$COURTPOWER_W149_MOD),
+  sd(court_power_party5$COURTPOWER_W149_MOD)
+)
+
 court_power_comparison <- cbind(court_power_1, court_power_2, court_power_3)
 barplot(court_power_comparison, beside = T,
         col = c("red", "pink", "white", "skyblue", "blue"),
@@ -201,16 +229,11 @@ barplot(court_power_comparison, beside = T,
         main = "Figure 2: Supreme Court Perceived Power by Party"
           )
 
-court_power_summary <- data.frame(summarize(group_by(court_power, party), mean(COURTPOWER_W149_MOD), sd(COURTPOWER_W149_MOD)))
-
-court_power_proportions <- data.frame(c("1 (Republican)", "2 (Lean Republican)", "3 (Moderate)", "4 (Lean Democrat)", "5 (Democrat)"), court_power_comparison)
-knitr::kable(court_power_proportions, col.names = c("Party", "1 (Too little power)", "2 (Right amount of power)", "3 (Too much power)"), caption = "Proportion of Each Political Party by Perceived Power of the Supreme Court")
-
-
-knitr::kable(court_power_summary, col.names = c("Party", "Mean", "Standard Deviation"), caption = "Summary Statistics of Supreme Court Perceived Power by Party")
+court_power_summary <- data.frame(c("1 (Republican)", "2 (Lean Republican)", "3 (Moderate)", "4 (Lean Democrat)", "5 (Democrat)"), court_power_comparison, court_power_means, court_power_sds)
+knitr::kable(court_power_summary, digits = 3, col.names = c("Party", "1 (Too little power)", "2 (Right amount of power)", "3 (Too much power)", "Mean", "Std. Dev."), caption = "Statistics of Supreme Court Perceived Power by Party")
 ```
 
-Because a linear model would be even less interpretable in this case, where the three limited categories of perceived power do not offer room for the sliding-scale interpretation of favorability, we address only the side-by-side barchart in Figure 2 and the summary statistics table. There is once again a clear, consistent trend where the more Republican a voter leans, the more likely they are to perceive the Court as having the right amount of power compared to Democrats; similarly, the more Democrat a voter leans, the more likely to perceive the Court as having too much power. Notably, a very small minority across all parties perceive the Court as having too little power; the debate is centered entirely around whether the Court has an appropriate or excessive amount of power. Also, in contrast to Figure 1, Democrats and Lean Democrats appear slightly less likely to rate the Court as having too much power (71% and 64%) than Republicans and Lean Republicans appear likely to rate the Court as having the right amount of power (79% and 71%), and Democrats appear slightly more likely to rate the Court as having the right amount of power (31 and 26%) than Republicans appear likely to rate the Court as having too much power (17 and 24%). This discrepancy might be reasonably interpreted as evidence that voters who do not align with the current partisan makeup of the Court disapprove of the Court's decisions and actions because of an inconsistency with their personal beliefs, but that they simultaneously understand that this inconsistency is inevitable (and temporary) and therefore should not reflect poorly on the Court as an institution. Therefore, the overall approval rating of the Supreme Court might be interpreted as more susceptible to partisan beliefs because it addresses general perceptions toward the Court that might be informed by narrower opinions about individual justices or decisions. Consequently, low public approval should not necessarily be interpreted as evidence to support the belief that the Supreme Court as an institution is failing and in need of reform.
+Because a linear model would be even less interpretable in this case, where the three limited categories of perceived power do not offer room for the sliding-scale interpretation of favorability, we address only the side-by-side barchart in Figure 2 and the summary statistics table. There is once again a clear, consistent trend where the more Republican a voter leans, the more they perceive the Court as having the right amount of power compared to Democrats; similarly, the more Democrat a voter leans, the more they perceive the Court as having too much power. Notably, a very small minority across all parties perceive the Court as having too little power; the debate is centered entirely around whether the Court has an appropriate or excessive amount of power. Also, in contrast to Figure 1, Democrats and Lean Democrats appear slightly less likely to rate the Court as having too much power (71% and 64.3%) than Republicans and Lean Republicans appear likely to rate the Court as having the right amount of power (78.5% and 70.9%), and Democrats appear slightly more likely to rate the Court as having the right amount of power (31.2% and 26.2%) than Republicans appear likely to rate the Court as having too much power (17.1% and 23.6%). This discrepancy might be reasonably interpreted as evidence that voters who do not align with the current partisan makeup of the Court disapprove of the Court's decisions and actions because of an inconsistency with their personal beliefs, but that they simultaneously understand that this inconsistency is inevitable (and temporary) and therefore should not reflect poorly on the Court as an institution. Therefore, the overall approval rating of the Supreme Court might be interpreted as more susceptible to partisan beliefs because it addresses general perceptions toward the Court that might be informed by narrower opinions about individual justices or decisions. Consequently, low public approval should not necessarily be interpreted as evidence to support the belief that the Supreme Court as an institution is failing and in need of reform.
 
 # 5 Court Politicization
 
@@ -253,24 +276,36 @@ court_politpresc_2 <- c(
   mean(court_politpresc_party5$SCOTUS_PRTSN_W149 == 2)
 )
 
+court_politpresc_means <- c(
+  mean(court_politpresc_party1$SCOTUS_PRTSN_W149),
+  mean(court_politpresc_party2$SCOTUS_PRTSN_W149),
+  mean(court_politpresc_party3$SCOTUS_PRTSN_W149),
+  mean(court_politpresc_party4$SCOTUS_PRTSN_W149),
+  mean(court_politpresc_party5$SCOTUS_PRTSN_W149)
+)
+
+court_politpresc_sds <- c(
+  sd(court_politpresc_party1$SCOTUS_PRTSN_W149),
+  sd(court_politpresc_party2$SCOTUS_PRTSN_W149),
+  sd(court_politpresc_party3$SCOTUS_PRTSN_W149),
+  sd(court_politpresc_party4$SCOTUS_PRTSN_W149),
+  sd(court_politpresc_party5$SCOTUS_PRTSN_W149)
+)
+
 court_politpresc_comparison <- cbind(court_politpresc_1, court_politpresc_2)
 barplot(court_politpresc_comparison, beside = T,
         col = c("red", "pink", "white", "skyblue", "blue"),
         names.arg = c("1 (Should)", "2 (Should NOT)"),
         cex.names = 0.8,
         ylab = "Party Proportion",
-        main = "Figure 3: Should Supreme Court justices' personal political views \n affect their decisions?"
+        main = "Figure 3: Should Supreme Court justices' \n personal political views affect their decisions?"
           )
 
-court_politpresc_summary <- data.frame(summarize(group_by(court_politpresc, party), mean(SCOTUS_PRTSN_W149), sd(SCOTUS_PRTSN_W149)))
-
-court_politpresc_proportions <- data.frame(c("1 (Republican)", "2 (Lean Republican)", "3 (Moderate)", "4 (Lean Democrat)", "5 (Democrat)"), court_politpresc_comparison)
-knitr::kable(court_politpresc_proportions, col.names = c("Party", "1 (Should)", "2 (Should NOT)"), caption = "Proportion of Each Political Party by Whether the Supreme Court Should Be Affected by Personal Political Views By Party")
-
-knitr::kable(court_politpresc_summary, col.names = c("Party", "Mean", "Standard Deviation"), caption = "Summary Statistics of Whether the Supreme Court Should Be Affected by Personal Political Views By Party")
+court_politpresc_summary <- data.frame(c("1 (Republican)", "2 (Lean Republican)", "3 (Moderate)", "4 (Lean Democrat)", "5 (Democrat)"), court_politpresc_comparison, court_politpresc_means, court_politpresc_sds)
+knitr::kable(court_politpresc_summary, digits = 3, col.names = c("Party", "1 (Should)", "2 (Should NOT)", "Mean", "Std. Dev."), caption = "Statistics of Whether the Supreme Court Should Be Affected by Personal Political Views by Party")
 ```
 
-Figure 3 displays a notable difference from the previous two barcharts: it is consistent regardless of party. Thus, there is a broad bipartisan consensus — indeed, around 90% across all parties — that Supreme Court justices' personal political view should NOT affect their decisions. The barchart and summary statistics table still display a slight consistent correlation between partisanship and perception, with increasing Democrat leaning correlating with a higher likelihood of believing that justices' personal political views should *not* affect their decisions. An ANOVA F-test might determine whether this difference is statistically significant but will not be conducted here.
+Figure 3 displays a notable difference from the previous two barcharts: it is consistent regardless of party. Thus, there is a broad bipartisan consensus — indeed, approximately 90% across all parties — that Supreme Court justices' personal political views should NOT affect their decisions. The barchart and summary statistics table still display a slight consistent correlation between partisanship and perception, with increasing Democrat leaning correlating with a higher likelihood of believing that justices' personal political views should *not* affect their decisions. Similarly, there appears to be the highest variation in Repubiclans' responses by comparing standard deviation values, suggesting that there is slightly greater division in their party over whether the Court ought to be partisan. An ANOVA F-test might determine whether the difference between parties is statistically significant but will not be conducted here.
 
 ## 5.2 Descriptive Court Politicization
 
@@ -340,24 +375,36 @@ court_politdesc_5 <- c(
   mean(court_politdesc_party5$SCOTUS_JOB_W149_MOD == 5)
 )
 
+court_politdesc_means <- c(
+  mean(court_politdesc_party1$SCOTUS_JOB_W149_MOD),
+  mean(court_politdesc_party2$SCOTUS_JOB_W149_MOD),
+  mean(court_politdesc_party3$SCOTUS_JOB_W149_MOD),
+  mean(court_politdesc_party4$SCOTUS_JOB_W149_MOD),
+  mean(court_politdesc_party5$SCOTUS_JOB_W149_MOD)
+)
+
+court_politdesc_sds <- c(
+  sd(court_politdesc_party1$SCOTUS_JOB_W149_MOD),
+  sd(court_politdesc_party2$SCOTUS_JOB_W149_MOD),
+  sd(court_politdesc_party3$SCOTUS_JOB_W149_MOD),
+  sd(court_politdesc_party4$SCOTUS_JOB_W149_MOD),
+  sd(court_politdesc_party5$SCOTUS_JOB_W149_MOD)
+)
+
 court_politdesc_comparison <- cbind(court_politdesc_1, court_politdesc_2, court_politdesc_3, court_politdesc_4, court_politdesc_5)
 barplot(court_politdesc_comparison, beside = T,
         col = c("red", "pink", "white", "skyblue", "blue"),
         names.arg = c("1 (Excellent)", "2 (Good)", "3 (Not sure)", "4 (Only fair)", "5 (Poor)"), 
         cex.names = 0.7,
         ylab = "Party Proportion",
-        main = "Figure 4: How well are Supreme Court justices keeping \n their personal political views from \n affecting their decisions?"
+        main = "Figure 4: How well are Supreme Court justices \n keeping their personal political views from \n affecting their decisions?"
           )
 
-court_politdesc_proportions <- data.frame(c("1 (Republican)", "2 (Lean Republican)", "3 (Moderate)", "4 (Lean Democrat)", "5 (Democrat)"), court_politdesc_comparison)
-knitr::kable(court_politdesc_proportions, col.names = c("Party", "1 (Excellent)", "2 (Good)", "3 (Not sure)", "4 (Only fair)", "5 (Poor)"), caption = "Proportion of Each Political Party by Whether the Supreme Court Is Affected by Personal Political Views By Party")
-
-court_politdesc_summary <- data.frame(summarize(group_by(court_politdesc, party), mean(SCOTUS_JOB_W149_MOD), sd(SCOTUS_JOB_W149_MOD)))
-
-knitr::kable(court_politdesc_summary, col.names = c("Party", "Mean", "Standard Deviation"), caption = "Summary Statistics of Whether the Supreme Court Is Affected by Personal Political Views By Party")
+court_politdesc_summary <- data.frame(c("1 (Republican)", "2 (Lean Republican)", "3 (Moderate)", "4 (Lean Democrat)", "5 (Democrat)"), court_politdesc_comparison, court_politdesc_means, court_politdesc_sds)
+knitr::kable(court_politdesc_summary, digits = 3, col.names = c("Party", "1 (Excellent)", "2 (Good)", "3 (Not sure)", "4 (Only fair)", "5 (Poor)", "Mean", "Std. Dev."), caption = "Statistics of Whether the Supreme Court Is Affected by Personal Political Views by Party")
 ```
 
-From Figure 4 and the summary statistics table, it is evident that despite bipartisan consensus on whether justices ought to be nonpartisan, voters' perceptions of whether judges are actually partisan reverts to the highly politicized trends from before. Leaning Republican is consistently correlated with a lower numerical response representing a more positive perception of justices' nonpartisanship. However, as in Figure 1, Figure 4 provides even more striking evidence that Democrats disapprove more strongly of the Court than Republicans approve. The majority (72% and 66%) of Democrats and Lean Democrats choose the lowest option, rating justices as doing a poor job of being nonpartisan. Meanwhile, Republicans are much more divided and hesitant to mirror such high approval, with a small minority (7% and 5%) of Republicans and Lean Republicans choosing the opposite rating of "Excellent," 40% and 26% choosing "Good," and a substantial proportion (29% and 35%) choosing "Only fair." The proportion of Republicans who agree with Democrats that justices are doing a poor job of being nonpartisan is around 11% and 18%, nearly as much as the proportion of Republicans who are not sure and greater than the proportion who think the justices are doing an excellent job. Thus, although Republicans do not condemn the Court's partisanship as strongly and severely as Democrats do, they appear somewhat hesitant and similarly skeptical that the Court is effectively remaining as nonpartisan as they believe it ought to be.
+From Figure 4 and the summary statistics table, it is evident that despite bipartisan consensus on whether justices ought to be nonpartisan, voters' perceptions of whether judges are actually partisan reverts to the highly politicized trends from before. Leaning Republican is consistently correlated with a lower numerical response representing a more positive perception of justices' nonpartisanship. However, as in Figure 1, Figure 4 provides even more striking evidence that Democrats disapprove more strongly of the Court than Republicans approve. The majority (72% and 65.8%) of Democrats and Lean Democrats choose the lowest option, rating justices as doing a poor job of being nonpartisan. Meanwhile, Republicans are much more divided and hesitant to mirror such high approval, with a small minority (7.4% and 5%) of Republicans and Lean Republicans choosing the opposite rating of "Excellent," 39.1% and 26.9% choosing "Good," and a substantial proportion (29.4% and 35.8%) choosing "Only fair." The proportion of Republicans who agree with Democrats that justices are doing a poor job of being nonpartisan is around 10.7% and 18%, nearly as much as the proportion of Republicans who are not sure and greater than the proportion who think the justices are doing an excellent job. Thus, although Republicans do not condemn the Court's partisanship as strongly and severely as Democrats do, they appear somewhat hesitant and similarly skeptical that the Court is effectively remaining as nonpartisan as they believe it ought to be.
 
 ```{r}
 lm_court_politdesc = lm(SCOTUS_JOB_W149_MOD ~ party, data = court_politdesc)
